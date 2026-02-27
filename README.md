@@ -12,8 +12,11 @@ A modular, PyTorch-native post-hoc probability recalibration library for deep ne
   - *Vector Scaling* – per-class diagonal scale + bias.
   - *Dirichlet Calibration* – full linear map in log-probability space with ODIR regularisation (λ off-diagonal, μ intercept penalties).
   - *OVA / TvA Reduction* – collapse K-class problems into per-class binary targets trained with BCE loss.
+  - *Beta Calibration* – per-class logistic regression in log-odds space, correcting both over- and under-confidence.
 - **Non-parametric methods**
   - *Isotonic Regression* – Pool Adjacent Violators Algorithm (PAVA) with a differentiable soft-sorting proxy for gradient flow.
+  - *Spline Calibration* – piecewise-linear interpolation through learnable quantile knots with smoothness regularisation.
+  - *Bayesian Binning into Quantiles (BBQ)* – Bayesian model averaging over multiple equal-frequency binning schemes.
 - **Calibration metrics** – Expected Calibration Error (ECE).
 
 ## Installation
