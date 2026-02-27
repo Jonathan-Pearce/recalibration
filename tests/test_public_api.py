@@ -6,7 +6,9 @@ import recalibration
 class TestPublicAPI:
     def test_all_exports_importable(self):
         for name in recalibration.__all__:
-            assert hasattr(recalibration, name), f"{name} listed in __all__ but not importable"
+            assert hasattr(recalibration, name), (
+                f"{name} listed in __all__ but not importable"
+            )
 
     def test_all_expected_exports(self):
         expected = {
