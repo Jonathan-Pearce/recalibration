@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "recalibration"
+version = "0.1.0"
+description = "PyTorch-native post-hoc probability recalibration library"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0",
+]
+
+[project.optional-dependencies]
+tensordict = ["tensordict>=0.2"]
+dev = ["pytest>=7.0", "tensordict>=0.2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
