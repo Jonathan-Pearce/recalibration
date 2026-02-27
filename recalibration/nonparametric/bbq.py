@@ -19,7 +19,6 @@ import torch.nn as nn
 
 from recalibration.base import Calibrator
 
-
 # ------------------------------------------------------------------
 # Single equal-frequency binning model
 # ------------------------------------------------------------------
@@ -97,9 +96,12 @@ def _predict_binned(
     bin_values: torch.Tensor,
 ) -> torch.Tensor:
     """Look up calibrated probabilities from a binning model."""
-    idx = torch.searchsorted(bin_edges.contiguous(), scores.contiguous()).clamp(
-        1, bin_edges.size(0) - 1
-    ) - 1
+    idx = (
+        torch.searchsorted(bin_edges.contiguous(), scores.contiguous()).clamp(
+            1, bin_edges.size(0) - 1
+        )
+        - 1
+    )
     idx = idx.clamp(0, bin_values.size(0) - 1)
     return bin_values[idx]
 

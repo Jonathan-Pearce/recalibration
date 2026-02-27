@@ -105,7 +105,8 @@ class SplineCalibrator(Calibrator):
     def _smoothness_penalty(self) -> torch.Tensor:
         """Discrete smoothness penalty: sum of squared second differences."""
         # Second differences of knot values
-        d2 = self.knot_values[:, 2:] - 2 * self.knot_values[:, 1:-1] + self.knot_values[:, :-2]
+        kv = self.knot_values
+        d2 = kv[:, 2:] - 2 * kv[:, 1:-1] + kv[:, :-2]
         return self.reg * d2.pow(2).sum()
 
     def calibrate(self, logits: torch.Tensor) -> torch.Tensor:
@@ -150,9 +151,7 @@ class SplineCalibrator(Calibrator):
         val_logits = val_logits.detach().to(self.knot_values.device)
         val_labels = val_labels.detach().to(self.knot_values.device)
 
-        optimizer = torch.optim.LBFGS(
-            [self.knot_values], lr=lr, max_iter=max_iter
-        )
+        optimizer = torch.optim.LBFGS([self.knot_values], lr=lr, max_iter=max_iter)
 
         def closure() -> torch.Tensor:
             optimizer.zero_grad()
