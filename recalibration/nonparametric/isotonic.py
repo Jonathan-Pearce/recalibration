@@ -14,7 +14,6 @@ import torch.nn as nn
 
 from recalibration.base import Calibrator
 
-
 # ------------------------------------------------------------------
 # Pool Adjacent Violators Algorithm (pure PyTorch, no NumPy)
 # ------------------------------------------------------------------
@@ -60,9 +59,11 @@ def _pava(values: torch.Tensor, weights: Optional[torch.Tensor] = None) -> torch
             i += 1
 
     # Expand blocks back to original length
-    return result.repeat_interleave(
-        _block_lengths(values, result, w)
-    ) if result.size(0) != values.size(0) else result
+    return (
+        result.repeat_interleave(_block_lengths(values, result, w))
+        if result.size(0) != values.size(0)
+        else result
+    )
 
 
 def _block_lengths(
@@ -129,11 +130,11 @@ class _SoftSort(torch.autograd.Function):
 
         # Gradient w.r.t. scores (through the softmax)
         # P_ij = softmax(-|s_i - s^sorted_j|/tau)
-        diff = (scores.unsqueeze(1) - sorted_scores.unsqueeze(0))
+        diff = scores.unsqueeze(1) - sorted_scores.unsqueeze(0)
         sign = diff.sign()
         # dP_ij/ds_i = P_ij * (sum_k P_ik * sign_ik/tau - sign_ij/tau)
-        weighted = (P * (-sign / tau))
-        correction = (P * (P * (-sign / tau)).sum(dim=1, keepdim=True))
+        weighted = P * (-sign / tau)
+        correction = P * (P * (-sign / tau)).sum(dim=1, keepdim=True)
         dP_ds = weighted - correction  # [N, N]
         grad_scores = (dP_ds @ sorted_values) * grad_output
 
@@ -224,7 +225,6 @@ class IsotonicCalibrator(Calibrator):
         """
         device = val_logits.device
         probs = torch.softmax(val_logits, dim=-1)
-        n = val_logits.size(0)
 
         self._bin_edges = []
         self._bin_values = []

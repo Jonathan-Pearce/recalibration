@@ -63,9 +63,7 @@ class _ReductionBase(Calibrator):
         val_labels = val_labels.detach().to(self.scale.device)
         targets = self._build_targets(val_logits, val_labels)
 
-        optimizer = torch.optim.LBFGS(
-            [self.scale, self.bias], lr=lr, max_iter=max_iter
-        )
+        optimizer = torch.optim.LBFGS([self.scale, self.bias], lr=lr, max_iter=max_iter)
 
         def closure() -> torch.Tensor:
             optimizer.zero_grad()

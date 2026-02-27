@@ -49,9 +49,7 @@ class Calibrator(nn.Module):
         """
         return logits
 
-    def forward(
-        self, x: Any, **kwargs: Any
-    ) -> torch.Tensor:
+    def forward(self, x: Any, **kwargs: Any) -> torch.Tensor:
         """Run the wrapped model and apply calibration.
 
         ``x`` may be a plain :class:`torch.Tensor` or, when *tensordict*

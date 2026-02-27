@@ -1,13 +1,13 @@
 """Tests for the base Calibrator, forward-hook context manager, and TensorDict."""
 
+import pytest
 import torch
 import torch.nn as nn
-import pytest
 
 from recalibration.base import Calibrator, calibration_hook
 
-
 # ── helpers ────────────────────────────────────────────────────────
+
 
 class _DummyModel(nn.Module):
     """Simple linear classifier for testing."""
